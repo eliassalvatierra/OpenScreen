@@ -4,20 +4,21 @@ Aplicación de código abierto para compartir y extender el escritorio entre equ
 
 ## Estado actual
 
-**Versión:** 0.1.0 — estructura inicial.
+**Versión:** 0.2.0 — integración inicial con XDG Desktop Portal.
 
 Incluye:
 - Interfaz de escritorio con Qt 6 Widgets.
-- Integración inicial con la biblioteca PipeWire.
-- Estructura C++ y configuración CMake.
+- Solicitud de sesión de captura mediante el portal ScreenCast.
+- Selección de un monitor y solicitud de autorización al usuario mediante KDE.
+- Cierre de la sesión del portal al cerrar la aplicación.
 
-Todavía no incluye captura real de pantalla, codificación de vídeo, transmisión de red ni monitor virtual.
+**Todavía no consume los fotogramas de PipeWire.** El portal autoriza y crea el flujo de pantalla; la conexión al descriptor remoto de PipeWire y la lectura de buffers son el siguiente objetivo.
 
 ## Entorno objetivo inicial
 
 - CachyOS / Arch Linux
 - KDE Plasma sobre Wayland
-- Qt 6
+- Qt 6 (Widgets y DBus)
 - PipeWire
 - CMake y Ninja
 - C++20
@@ -45,6 +46,8 @@ cmake --build build
 ./build/openscreen
 ```
 
+Al pulsar **Iniciar captura de pantalla**, KDE debe mostrar el diálogo de selección/autorización. Si se concede, OpenScreen informa que el portal creó el flujo de pantalla.
+
 ## Próximo objetivo técnico
 
-Validar una sesión de captura mediante XDG Desktop Portal (ScreenCast) y recibir los fotogramas desde PipeWire. La inicialización actual de la biblioteca PipeWire no representa todavía una captura activa.
+Abrir el descriptor remoto con `OpenPipeWireRemote()`, conectar un consumidor PipeWire al flujo seleccionado y recibir los primeros buffers de vídeo.
