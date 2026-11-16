@@ -17,7 +17,6 @@ int main(int argc, char *argv[])
     QApplication::setApplicationVersion(QStringLiteral("0.1.0"));
 
     CaptureManager captureManager;
-    captureManager.initialize();
 
     QMainWindow window;
     window.setWindowTitle(QStringLiteral("OpenScreen"));
@@ -107,6 +106,9 @@ int main(int argc, char *argv[])
         systemStatus,
         &QLabel::setText
     );
+
+    // Conectar las señales antes de inicializar PipeWire para no perder el estado inicial.
+    captureManager.initialize();
 
     window.setCentralWidget(central);
     window.statusBar()->showMessage(
