@@ -426,6 +426,14 @@ bool CaptureManager::startPipeWire(int remoteFd)
     spa_pod_builder builder = SPA_POD_BUILDER_INIT(podBuffer, sizeof(podBuffer));
     const spa_pod *params[1];
 
+    // SPA_POD_CHOICE_RANGE_* necesita punteros a estructuras con vida útil estable.
+    const spa_rectangle preferredSize{1280, 720};
+    const spa_rectangle minimumSize{1, 1};
+    const spa_rectangle maximumSize{8192, 8192};
+    const spa_fraction preferredFramerate{30, 1};
+    const spa_fraction minimumFramerate{1, 1};
+    const spa_fraction maximumFramerate{60, 1};
+
     params[0] = static_cast<const spa_pod *>(spa_pod_builder_add_object(
         &builder,
         SPA_TYPE_OBJECT_Format,
@@ -439,14 +447,14 @@ bool CaptureManager::startPipeWire(int remoteFd)
             SPA_VIDEO_FORMAT_RGBx
         ),
         SPA_FORMAT_VIDEO_size, SPA_POD_CHOICE_RANGE_Rectangle(
-            &SPA_RECTANGLE(1280, 720),
-            &SPA_RECTANGLE(1, 1),
-            &SPA_RECTANGLE(8192, 8192)
+            &preferredSize,
+            &minimumSize,
+            &maximumSize
         ),
         SPA_FORMAT_VIDEO_framerate, SPA_POD_CHOICE_RANGE_Fraction(
-            &SPA_FRACTION(30, 1),
-            &SPA_FRACTION(1, 1),
-            &SPA_FRACTION(60, 1)
+            &preferredFramerate,
+            &minimumFramerate,
+            &maximumFramerate
         )
     ));
 
