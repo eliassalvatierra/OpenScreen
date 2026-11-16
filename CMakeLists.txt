@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(OpenScreen VERSION 0.1.0 LANGUAGES CXX)
+project(OpenScreen VERSION 0.2.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt6 6.6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 6.6 REQUIRED COMPONENTS Widgets DBus)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(PIPEWIRE REQUIRED IMPORTED_TARGET libpipewire-0.3)
 
@@ -19,6 +19,7 @@ add_executable(openscreen
 target_link_libraries(openscreen
     PRIVATE
         Qt6::Widgets
+        Qt6::DBus
         PkgConfig::PIPEWIRE
 )
 
