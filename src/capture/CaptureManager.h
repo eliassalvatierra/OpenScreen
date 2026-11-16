@@ -67,6 +67,7 @@ private:
     uint32_t m_streamNodeId = 0;
     QString m_streamSerial;
     pw_thread_loop *m_pwLoop = nullptr;
+    bool m_pwLoopStarted = false;
     pw_context *m_pwContext = nullptr;
     pw_core *m_pwCore = nullptr;
     pw_stream *m_pwStream = nullptr;
