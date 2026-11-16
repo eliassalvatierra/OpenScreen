@@ -3,6 +3,7 @@
 #include <QFrame>
 #include <QLabel>
 #include <QMainWindow>
+#include <QPushButton>
 #include <QStatusBar>
 #include <QVBoxLayout>
 #include <QWidget>
@@ -55,8 +56,13 @@ int main(int argc, char *argv[])
         QStringLiteral("Inicializando componentes..."), systemCard
     );
 
+    auto *captureButton = new QPushButton(
+        QStringLiteral("Iniciar captura de pantalla"), systemCard
+    );
+
     systemLayout->addWidget(systemTitle);
     systemLayout->addWidget(systemStatus);
+    systemLayout->addWidget(captureButton);
 
     auto *devicesTitle = new QLabel(
         QStringLiteral("Dispositivos"), central
@@ -75,7 +81,7 @@ int main(int argc, char *argv[])
 
     auto *nextSteps = new QLabel(
         QStringLiteral(
-            "1. Conectar con el portal de captura de Wayland\n"
+            "1. Solicitar permiso de captura mediante KDE\n"
             "2. Recibir fotogramas desde PipeWire\n"
             "3. Codificar vídeo con aceleración por hardware\n"
             "4. Transmitir a los dispositivos cliente"
@@ -107,12 +113,18 @@ int main(int argc, char *argv[])
         &QLabel::setText
     );
 
-    // Conectar las señales antes de inicializar PipeWire para no perder el estado inicial.
+    QObject::connect(
+        captureButton,
+        &QPushButton::clicked,
+        &captureManager,
+        &CaptureManager::startCapture
+    );
+
     captureManager.initialize();
 
     window.setCentralWidget(central);
     window.statusBar()->showMessage(
-        QStringLiteral("OpenScreen 0.1.0 | CachyOS | KDE Plasma | Wayland")
+        QStringLiteral("OpenScreen 0.2.0 | CachyOS | KDE Plasma | Wayland")
     );
 
     window.show();
