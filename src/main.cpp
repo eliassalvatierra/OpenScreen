@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     QApplication::setApplicationName(QStringLiteral("OpenScreen"));
-    QApplication::setApplicationVersion(QStringLiteral("0.2.0"));
+    QApplication::setApplicationVersion(QStringLiteral("0.3.0"));
 
     CaptureManager captureManager;
 
@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
 
     window.setCentralWidget(central);
     window.statusBar()->showMessage(
-        QStringLiteral("OpenScreen 0.2.0 | CachyOS | KDE Plasma | Wayland")
+        QStringLiteral("OpenScreen 0.3.0 | CachyOS | KDE Plasma | Wayland")
     );
 
     window.show();
