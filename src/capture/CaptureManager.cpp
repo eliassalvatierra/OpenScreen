@@ -369,6 +369,7 @@ bool CaptureManager::startPipeWire(int remoteFd)
         fail(QStringLiteral("No se pudo iniciar el hilo de PipeWire."));
         return false;
     }
+    m_pwLoopStarted = true;
 
     pw_thread_loop_lock(m_pwLoop);
 
@@ -536,7 +537,8 @@ void CaptureManager::stopPipeWire()
     if (!m_pwLoop)
         return;
 
-    pw_thread_loop_lock(m_pwLoop);
+    if (m_pwLoopStarted)
+        pw_thread_loop_lock(m_pwLoop);
 
     if (m_pwStream) {
         spa_hook_remove(&m_streamListener);
@@ -555,8 +557,12 @@ void CaptureManager::stopPipeWire()
         m_pwContext = nullptr;
     }
 
-    pw_thread_loop_unlock(m_pwLoop);
-    pw_thread_loop_stop(m_pwLoop);
+    if (m_pwLoopStarted) {
+        pw_thread_loop_unlock(m_pwLoop);
+        pw_thread_loop_stop(m_pwLoop);
+        m_pwLoopStarted = false;
+    }
+
     pw_thread_loop_destroy(m_pwLoop);
     m_pwLoop = nullptr;
 }
