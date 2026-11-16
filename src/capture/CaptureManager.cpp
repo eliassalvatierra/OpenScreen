@@ -262,7 +262,10 @@ void CaptureManager::openPipeWireRemote(const QVariantMap &results)
         return;
     }
 
-    QDBusArgument streams = streamsValue.value<QDBusArgument>();
+    // La respuesta del portal es a(ua{sv}): array de estructuras.
+    // QDBusArgument debe ser const para seleccionar sus operadores de lectura;
+    // una instancia no-const intenta usar la API de escritura y provoca SIGABRT.
+    const QDBusArgument streams = streamsValue.value<QDBusArgument>();
     streams.beginArray();
 
     if (streams.atEnd()) {
