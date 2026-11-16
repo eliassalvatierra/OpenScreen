@@ -204,12 +204,11 @@ void CaptureManager::onPortalResponse(
     }
 
     if (response != 0) {
-        m_stage = PortalStage::Idle;
-        emit statusChanged(
-            response == 1
-                ? QStringLiteral("La solicitud de captura fue cancelada.")
-                : QStringLiteral("KDE no pudo completar la solicitud de captura.")
-        );
+        const QString message = response == 1
+            ? QStringLiteral("La solicitud de captura fue cancelada.")
+            : QStringLiteral("KDE no pudo completar la solicitud de captura.");
+        shutdown();
+        emit statusChanged(message);
         return;
     }
 
@@ -270,7 +269,7 @@ QString CaptureManager::requestPathForToken(const QString &token) const
 
 void CaptureManager::fail(const QString &message)
 {
-    m_stage = PortalStage::Idle;
+    shutdown();
     emit errorOccurred(message);
 }
 
